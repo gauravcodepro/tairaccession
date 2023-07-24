@@ -620,7 +620,8 @@ def preparegeneNamePhytozome(phytozome_file, output_file):
     geneName = {}
     with open(os.path.abspath(os.path.join(os.getcwd(),phytozome_file), "r")) as file:
         for line in file.readlines():
-            geneName[line.strip().split("\t")[0]] = [line.strip().split("\t")[1]]
+            geneName[line.strip().split("\t")[0]] = ''.join([j for i in \
+                                                            ([line.strip().split("\t")[1]]) for j in i])
     with open(os.path.abspath(os.path.join(os.getcwd(),output_file), "w")) as processed:
         print(geneName, file=processed)       
       

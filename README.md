@@ -191,7 +191,7 @@ print(list(functional.values())[:10])
 from tairaccession.geneNames import geneNames
 genes = geneNames
 print(list(genes.values())[:10])
-[['NAC001'], ['ARV1'], ['ARV1'], ['ARV1'], ['ARV1'], ['ARV1'], ['ARV1'], ['NGA3'], ['NGA3'], ['DCL1']]
+['NAC001', 'ARV1', 'ARV1', 'ARV1', 'ARV1', 'ARV1', 'ARV1', 'NGA3', 'NGA3', 'DCL1']
 print(list(genes.keys())[:10])
 ['AT1G01010.1', 'AT1G01020.1', 'AT1G01020.2', 'AT1G01020.3', 'AT1G01020.4', 'AT1G01020.5', 'AT1G01020.6', 'AT1G01030.1', 'AT1G01030.2', 'AT1G01040.1']
 # a inbuilt gene name fetcher for any phytozome file. implemented # using the deque and provides faster iteration and prompt results. also provides the option for the ids file to be specified.
