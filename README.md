@@ -183,6 +183,7 @@ from tairaccession.functionalNames import functionalNames
 functional = functionalNames
 print(list(functional.keys())[:10])
 ['AT1G01010.1', 'AT1G01020.1', 'AT1G01020.2', 'AT1G01020.3', 'AT1G01020.4', 'AT1G01020.5', 'AT1G01020.6', 'AT1G01030.1', 'AT1G01030.2', 'AT1G01040.1']
+print(list(functional.values())[:10])
 ['NAC domain containing protein 1', 'ARV1 family protein', 'ARV1 family protein', 'ARV1 family protein', 'ARV1 family protein', 'ARV1 family protein', 'ARV1 family protein', 'AP2/B3-like transcriptional factor family protein', 'AP2/B3-like transcriptional factor family protein', 'dicer-like 1']
 # tairaccession has 2 inbuilt functions for the preparation of the update files as per the release of the phytozome.
 ```
