@@ -177,6 +177,25 @@ getagiDescription("/Users/gauravsablok/Desktop/release/test_ids.txt", \
  ('AT5G27680', 'AT5G27680|RECQSIM|RECQ helicase SIM|T1G16.10|T1G16_10')}                         
 help(getagiDescription) # for detailed information
 ````
+```python
+from tairaccession.functionalNames import functionalNames
+# support for the phytozome gff files and functional name associations. also provides the option for the ids file to be specified.
+functional = functionalNames
+print(list(functional.keys())[:10])
+['AT1G01010.1', 'AT1G01020.1', 'AT1G01020.2', 'AT1G01020.3', 'AT1G01020.4', 'AT1G01020.5', 'AT1G01020.6', 'AT1G01030.1', 'AT1G01030.2', 'AT1G01040.1']
+['NAC domain containing protein 1', 'ARV1 family protein', 'ARV1 family protein', 'ARV1 family protein', 'ARV1 family protein', 'ARV1 family protein', 'ARV1 family protein', 'AP2/B3-like transcriptional factor family protein', 'AP2/B3-like transcriptional factor family protein', 'dicer-like 1']
+# tairaccession has 2 inbuilt functions for the preparation of the update files as per the release of the phytozome.
+```
+```python
+from tairaccession.geneNames import geneNames
+genes = geneNames
+print(list(genes.values())[:10])
+[['NAC001'], ['ARV1'], ['ARV1'], ['ARV1'], ['ARV1'], ['ARV1'], ['ARV1'], ['NGA3'], ['NGA3'], ['DCL1']]
+print(list(genes.keys())[:10])
+['AT1G01010.1', 'AT1G01020.1', 'AT1G01020.2', 'AT1G01020.3', 'AT1G01020.4', 'AT1G01020.5', 'AT1G01020.6', 'AT1G01030.1', 'AT1G01030.2', 'AT1G01040.1']
+# a inbuilt gene name fetcher for any phytozome file. implemented # using the deque and provides faster iteration and prompt results. also provides the option for the ids file to be specified.
+```
+
 ## Contributing
 
 Interested in contributing? Check out the contributing guidelines. Please note that this project is released with a Code of Conduct. By contributing to this project, you agree to abide by its terms.
