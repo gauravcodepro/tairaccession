@@ -6,6 +6,8 @@ from pygenomeviz import GenomeViz
 from tairaccession.functionalNames import functionalNames
 from tairaccession.geneNames import geneNames
 
+
+
 def uniprotAgi(agi_file, ids_file):
     """
     _summary_
@@ -63,7 +65,7 @@ def agiUniprot(agi_uniprot_file, ids_file):
         final_ids = [i for i in agi_ids if i!= ""]
     with open(os.path.abspath(os.path.join(os.getcwd(), agi_uniprot_file)), "r") as uni:
       for line in uni.readlines():
-        ag_uniprot[line.strip().split("\t")[0]] = line.strip().split("\t")[1:]
+        ag_uniprot[line.strip().split("\t")[0]] = ''.join(line.strip().split("\t")[1:])
       return [(k,v) for k,v in ag_uniprot.items() for i in final_ids if i == k]
 
 
@@ -96,12 +98,12 @@ def uniprotTair(tair_uniprot_file, ids_file):
         tair_uniprot[line.strip().split("\t")[0]] = line.strip().split("\t")[1:]
       return [(k,v) for k,v in tair_uniprot.items() for i in final_ids if i == v[1]]
 
+
 def agiSpliceCoordinates(ids_file, gff_file, gene_type = None):
   """
   _summary_
   this functions takes a gff file and a specific type and returns the 
   coordinates of those ids including the splice variants. This function
-  
   Arguments:
       ids_file -- _this takes the AGI ids from a text file_
       gff_file -- _this takes a gff3 file TAIR10_GFF3_genes.gff_
@@ -131,6 +133,8 @@ def agiSpliceCoordinates(ids_file, gff_file, gene_type = None):
                                                                                     == "gene").dropna()["Start"].to_list()))
         gene_type_end = list(map(int,renaming_tair[["gene_type", "Start", "End"]].where(renaming_tair["gene_type"] == \
                                                                                     "gene").dropna()["End"].to_list()))
+        gene_type_strand = list(map(lambda n: 1 if n == "+" else -1,renaming_tair[["gene_type", "Start", "End", "Strand"]].
+                                           where(renaming_tair["gene_type"] == "gene").dropna()["Strand"].to_list()))
         gene_type_gene_ID = pd.DataFrame(renaming_tair[["gene_type", "Start", "End","Gene_ID"]].where(renaming_tair["gene_type"] == "gene").dropna() 
                                       ["Gene_ID"].apply(lambda n : n.split(";")[0]).apply(lambda n : n.split(".")[0]) \
                                           .apply(lambda n: n.replace("Parent=", "")).apply(lambda n: n.replace("ID=", "")))
@@ -141,15 +145,15 @@ def agiSpliceCoordinates(ids_file, gff_file, gene_type = None):
                                                                n.replace("ID=", "")))["Gene_ID"].to_list()
         arabidopsis_gene = []
         for i in range(len(gene_type_start)):
-            arabidopsis_gene.append([[gene_type_gene_ID_AGI[i]],[gene_type_start[i], gene_type_end[i]]])
+            arabidopsis_gene.append([gene_type_gene_ID_AGI[i],gene_type_start[i], gene_type_end[i], gene_type_strand[i]])
         agi_ids = []
         final_ids = []
         with open(os.path.abspath(os.path.join(os.getcwd(), ids_file)), "r") as ids:
             for line in ids.readlines():
                 agi_ids.append(line.strip())
-            final_ids = [i.upper() for i in agi_ids if i!= ""]
-            selected_gene = [i for i in arabidopsis_gene for j in final_ids if j in i[0]]
-            return selected_gene
+        final_ids = [i.upper() for i in agi_ids if i!= ""]
+        selected_gene = [i for i in arabidopsis_gene for j in final_ids if j in i[0]]
+        return selected_gene
   if ids_file and gff_file and gene_type == "exon":
         tair = pd.read_csv(gff_file, sep = "\t")
         renaming_tair = tair.rename(columns={"Chr1":"Chromosome", "chromosome": "gene_type", "1": \
@@ -159,6 +163,8 @@ def agiSpliceCoordinates(ids_file, gff_file, gene_type = None):
                                                                                     == "exon").dropna()["Start"].to_list()))
         exon_type_end = list(map(int,renaming_tair[["gene_type", "Start", "End"]].where(renaming_tair["gene_type"] == \
                                                                                     "exon").dropna()["End"].to_list()))
+        exon_type_strand = list(map(lambda n: 1 if n == "+" else -1,renaming_tair[["gene_type", "Start", "End", "Strand"]].
+                                           where(renaming_tair["gene_type"] == "exon").dropna()["Strand"].to_list()))
         exon_type_exon_ID = pd.DataFrame(renaming_tair[["gene_type", "Start", "End","Gene_ID"]]. \
                                      where(renaming_tair["gene_type"] == "exon").dropna() \
                                       ["Gene_ID"].apply(lambda n: n.replace("Parent=", "")))
@@ -167,67 +173,77 @@ def agiSpliceCoordinates(ids_file, gff_file, gene_type = None):
                                       ["Gene_ID"].apply(lambda n: n.replace("Parent=", "")))["Gene_ID"].to_list()
         arabidopsis_exon = []
         for i in range(len(exon_type_start)):
-            arabidopsis_exon.append([[exon_type_exon_ID_AGI[i], exon_type_start[i], exon_type_end[i]]])
+            arabidopsis_exon.append([exon_type_exon_ID_AGI[i], exon_type_start[i], exon_type_end[i], exon_type_strand[i]])
         agi_ids = []
         final_ids = []
         with open(os.path.abspath(os.path.join(os.getcwd(), ids_file)), "r") as ids:
             for line in ids.readlines():
                 agi_ids.append(line.strip())
-            final_ids = [i.upper() for i in agi_ids if i!= ""]
-            selected_exon = [i for i in arabidopsis_exon for j in final_ids if j in i[0]]
-            return selected_exon
+        final_ids = [i.upper() for i in agi_ids if i!= ""]
+        selected_exon = [i for i in arabidopsis_exon for j in final_ids if j in i[0]]
+        return selected_exon
   if ids_file and gff_file and gene_type == "three_prime_UTR":
         tair = pd.read_csv(gff_file, sep = "\t")
         renaming_tair = tair.rename(columns={"Chr1":"Chromosome", "chromosome": "gene_type", "1": \
                             "Start", "30427671": "End", "..1": "Strand", "ID=Chr1;Name=Chr1":"Gene_ID"})
-        three_prime_UTR_type = renaming_tair[["gene_type", "Start", "End"]].where(renaming_tair["gene_type"] == "exon").dropna()
+        three_prime_UTR_type = renaming_tair[["gene_type", "Start", "End"]].where(renaming_tair["gene_type"] == "three_prime_UTR").dropna()
         three_prime_UTR_type_start = list(map(int,renaming_tair[["gene_type", "Start", "End"]].where(renaming_tair["gene_type"] \
                                                                                     == "three_prime_UTR").dropna()["Start"].to_list()))
         three_prime_UTR_type_end = list(map(int,renaming_tair[["gene_type", "Start", "End"]].where(renaming_tair["gene_type"] == \
                                                                                     "three_prime_UTR").dropna()["End"].to_list()))
+        three_prime_UTR_type_strand = list(map(lambda n: 1 if n == "+" else -1,renaming_tair[["gene_type", "Start", "End", "Strand"]].
+                                           where(renaming_tair["gene_type"] == "three_prime_UTR").dropna()["Strand"].to_list()))
         three_prime_UTR_type_ID = pd.DataFrame(renaming_tair[["gene_type", "Start", "End","Gene_ID"]]. \
                                      where(renaming_tair["gene_type"] == "three_prime_UTR").dropna() \
                                       ["Gene_ID"].apply(lambda n: n.replace("Parent=", "")))
-        three_prime_UTR_type_AGI = pd.DataFrame(renaming_tair[["gene_type", "Start", "End","Gene_ID"]]. \
+        three_prime_UTR_type_ID_AGI = pd.DataFrame(renaming_tair[["gene_type", "Start", "End","Gene_ID"]]. \
                                      where(renaming_tair["gene_type"] == "three_prime_UTR").dropna() \
                                       ["Gene_ID"].apply(lambda n: n.replace("Parent=", "")))["Gene_ID"].to_list()
+        arabidopsis_three_prime_UTR = []
         for i in range(len(three_prime_UTR_type_start)):
-            arabidopsis_three_prime_UTR.append([three_prime_UTR_ID_AGI[i], three_prime_UTR_type_start[i], three_prime_UTR_type_end[i]])
+            arabidopsis_three_prime_UTR.append([three_prime_UTR_type_ID_AGI[i],\
+                                                   three_prime_UTR_type_start[i],\
+                                                   three_prime_UTR_type_end[i],\
+                                                   three_prime_UTR_type_strand[i]])
         agi_ids = []
         final_ids = []
         with open(os.path.abspath(os.path.join(os.getcwd(), ids_file)), "r") as ids:
             for line in ids.readlines():
                 agi_ids.append(line.strip())
-            final_ids =[i.upper() for i in agi_ids if i!= ""]
-            selected_three_prime_UTR = [i for i in arabidopsis_three_prime_UTR for j in final_ids if j in i[0]]
-            return selected_three_prime_UTR
+        final_ids =[i.upper() for i in agi_ids if i!= ""]
+        selected_three_prime_UTR = [i for i in arabidopsis_three_prime_UTR for j in final_ids if j in i[0]]
+        return selected_three_prime_UTR
   if ids_file and gff_file and gene_type == "five_prime_UTR":
         tair = pd.read_csv(gff_file, sep = "\t")
         renaming_tair = tair.rename(columns={"Chr1":"Chromosome", "chromosome": "gene_type", "1": \
                             "Start", "30427671": "End", "..1": "Strand", "ID=Chr1;Name=Chr1":"Gene_ID"})
-        five_prime_UTR_type = renaming_tair[["gene_type", "Start", "End"]].where(renaming_tair["gene_type"] == "exon").dropna()
+        five_prime_UTR_type = renaming_tair[["gene_type", "Start", "End"]].where(renaming_tair["gene_type"] == "five_prime_UTR").dropna()
         five_prime_UTR_type_start = list(map(int,renaming_tair[["gene_type", "Start", "End"]].where(renaming_tair["gene_type"] \
-                                                                                    == "three_prime_UTR").dropna()["Start"].to_list()))
+                                                                                    == "five_prime_UTR").dropna()["Start"].to_list()))
         five_prime_UTR_type_end = list(map(int,renaming_tair[["gene_type", "Start", "End"]].where(renaming_tair["gene_type"] == \
-                                                                                    "three_prime_UTR").dropna()["End"].to_list()))
+                                                                                    "five_prime_UTR").dropna()["End"].to_list()))
+        five_prime_UTR_type_strand = list(map(lambda n: 1 if n == "+" else -1,renaming_tair[["gene_type", "Start", "End", "Strand"]].
+                                           where(renaming_tair["gene_type"] == "five_prime_UTR").dropna()["Strand"].to_list()))
         five_prime_UTR_type_ID = pd.DataFrame(renaming_tair[["gene_type", "Start", "End","Gene_ID"]]. \
-                                     where(renaming_tair["gene_type"] == "three_prime_UTR").dropna() \
+                                     where(renaming_tair["gene_type"] == "five_prime_UTR").dropna() \
                                       ["Gene_ID"].apply(lambda n: n.replace("Parent=", "")))
-        five_prime_UTR_type_AGI = pd.DataFrame(renaming_tair[["gene_type", "Start", "End","Gene_ID"]]. \
-                                     where(renaming_tair["gene_type"] == "three_prime_UTR").dropna() \
+        five_prime_UTR_type_ID_AGI = pd.DataFrame(renaming_tair[["gene_type", "Start", "End","Gene_ID"]]. \
+                                     where(renaming_tair["gene_type"] == "five_prime_UTR").dropna() \
                                       ["Gene_ID"].apply(lambda n: n.replace("Parent=", "")))["Gene_ID"].to_list()
         arabidopsis_five_prime_UTR = []
         for i in range(len(five_prime_UTR_type_start)):
-            arabidopsis_five_prime_UTR.append([[five_prime_UTR_ID_AGI[i],five_prime_UTR_type_start[i], five_prime_UTR_type_end[i]]])
+            arabidopsis_five_prime_UTR.append([five_prime_UTR_type_ID_AGI[i],\
+                                                   five_prime_UTR_type_start[i],\
+                                                   five_prime_UTR_type_end[i],\
+                                                   five_prime_UTR_type_strand[i]])
         agi_ids = []
         final_ids = []
         with open(os.path.abspath(os.path.join(os.getcwd(), ids_file)), "r") as ids:
             for line in ids.readlines():
                 agi_ids.append(line.strip())
-            final_ids = [i.upper() for i in agi_ids if i!= ""]
-            selected_five_prime_UTR = [i for i in arabidopsis_five_prime_UTR for j in final_ids if j in i[0]]
-            return selected_five_prime_UTR
-
+        final_ids =[i.upper() for i in agi_ids if i!= ""]
+        selected_five_prime_UTR = [i for i in arabidopsis_five_prime_UTR for j in final_ids if j in i[0]]
+        return selected_five_prime_UTR
   if ids_file and gff_file and gene_type == "cds":
         tair = pd.read_csv(gff_file, sep = "\t")
         renaming_tair = tair.rename(columns={"Chr1":"Chromosome", "chromosome": "gene_type", "1": \
@@ -238,7 +254,7 @@ def agiSpliceCoordinates(ids_file, gff_file, gene_type = None):
         cds_type_end = list(map(int,renaming_tair[["gene_type", "Start", "End"]].where(renaming_tair["gene_type"] == \
                                                                                     "CDS").dropna()["End"].to_list()))
         cds_type_strand = list(map(lambda n: 1 if n == "+" else -1,renaming_tair[["gene_type", "Start", "End", "Strand"]].
-                                           where(renaming_tair["gene_type"] == "gene").dropna()["Strand"].to_list()))
+                                           where(renaming_tair["gene_type"] == "CDS").dropna()["Strand"].to_list()))
         cds_type_ID = pd.DataFrame(renaming_tair[["gene_type", "Start", "End","Gene_ID"]]. \
                                      where(renaming_tair["gene_type"] == "CDS").dropna() \
                                       ["Gene_ID"].apply(lambda n: n.split(",")[0]).apply(lambda n: n.replace("Parent=", "")))
@@ -247,15 +263,15 @@ def agiSpliceCoordinates(ids_file, gff_file, gene_type = None):
                                       ["Gene_ID"].apply(lambda n: n.split(",")[0]).apply(lambda n: n.replace("Parent=", "")))["Gene_ID"].to_list()  
         arabidopsis_cds = []
         for i in range(len(cds_type_start)):
-            arabidopsis_cds.append([cds_type_ID_AGI[i],cds_type_start[i], cds_type_end[i]])
+            arabidopsis_cds.append([cds_type_ID_AGI[i], cds_type_start[i],cds_type_end[i], cds_type_strand[i]])
         agi_ids = []
         final_ids = []
         with open(os.path.abspath(os.path.join(os.getcwd(), ids_file)), "r") as ids:
             for line in ids.readlines():
                 agi_ids.append(line.strip())
-            final_ids = [i.upper() for i in agi_ids if i!= ""]
-            selected_cds = [i for i in arabidopsis_cds for j in final_ids if j in i[0]]
-            return selected_cds
+        final_ids = [i.upper() for i in agi_ids if i!= ""]
+        selected_cds = [i for i in arabidopsis_cds for j in final_ids if j in i[0]]
+        return selected_cds
 
 def agiGO(ids_file, association_file):
     """
@@ -271,8 +287,7 @@ def agiGO(ids_file, association_file):
       _description_
       this provides a nested tuples of the association fetched
       from the association file for those agis. 
-      
-"""
+    """
     with open(os.path.join(os.getcwd(),association_file), "r") as goslim:
         with open(os.path.join(os.getcwd(),association_file + "name"), "w") as gofinal:
             for line in goslim.readlines():
@@ -333,8 +348,8 @@ def agiDescription(ids_file, association_file):
       _description_
       a nested list of the AGI and the Description.
   """
-  with open(os.path.abspath(os.path.join(os.getcwd(),association_file), "r") as goslim:
-    with open(os.path.abspath(os.path.join(os.getcwd(),association_file + "name"), "w") as gofinal:
+  with open(os.path.abspath(os.path.join(os.getcwd(),association_file), "r")) as goslim:
+    with open(os.path.abspath(os.path.join(os.getcwd(),association_file + "name"), "w")) as gofinal:
         for line in goslim.readlines():
           if line.startswith("!"): 
             continue     
@@ -349,126 +364,6 @@ def agiDescription(ids_file, association_file):
     description = go_data.iloc[::,10].to_list()
     return set([j for i in final_ids for j in ([(i,j) for i,j in zip(AGI,description)]) if j[0] == i])
 
-def visualizeAgiCDS(ids_file, gff_file, genome_name, size):
-    tair = pd.read_csv(gff_file, sep = "\t")
-    renaming_tair = tair.rename(columns={"Chr1":"Chromosome", "chromosome": "gene_type", "1": \
-                            "Start", "30427671": "End", "..1": "Strand", "ID=Chr1;Name=Chr1":"Gene_ID"})
-    cds_type = renaming_tair[["gene_type", "Start", "End", "Strand"]].where(renaming_tair["gene_type"] == "CDS").dropna()
-    cds_type_start = list(map(int,renaming_tair[["gene_type", "Start", "End"]].where(renaming_tair["gene_type"] \
-                                                                                    == "CDS").dropna()["Start"].to_list()))
-    cds_type_end = list(map(int,renaming_tair[["gene_type", "Start", "End"]].where(renaming_tair["gene_type"] == \
-                                                                                    "CDS").dropna()["End"].to_list()))
-    cds_type_strand = list(map(lambda n: 1 if n == "+" else -1,renaming_tair[["gene_type", "Start", "End", "Strand"]].
-                                           where(renaming_tair["gene_type"] == "gene").dropna()["Strand"].to_list()))
-    cds_type_ID = pd.DataFrame(renaming_tair[["gene_type", "Start", "End","Gene_ID"]]. \
-                                     where(renaming_tair["gene_type"] == "CDS").dropna() \
-                                      ["Gene_ID"].apply(lambda n: n.split(",")[0]).apply(lambda n: n.replace("Parent=", "")))
-    cds_type_ID_AGI = pd.DataFrame(renaming_tair[["gene_type", "Start", "End","Gene_ID"]]. \
-                                     where(renaming_tair["gene_type"] == "CDS").dropna() \
-                                      ["Gene_ID"].apply(lambda n: n.split(",")[0]).apply(lambda n: n.replace("Parent=", "")))["Gene_ID"].to_list()  
-    arabidopsis_cds = []
-    for i in range(len(cds_type_start)):
-        arabidopsis_cds.append([cds_type_start[i], cds_type_end[i], cds_type_strand[i]])
-    agi_ids = []
-    final_ids = []
-    with open(os.path.abspath(os.path.join(os.getcwd(), ids_file)), "r") as ids:
-        for line in ids.readlines():
-            agi_ids.append(line.strip())
-        final_ids = [i.upper() for i in agi_ids if i!= ""]
-        selected_cds = [i for i in arabidopsis_cds for j in final_ids if j in i[0]]
-    gv = GenomeViz()
-    track = gv.add_feature_track(name, genome_size)
-    for i, j in enumerate(selected_cds, 1):
-    start, end, strand = j
-    track.add_feature(start, end, strand, label=f"cds{idx:02d}") 
-    gv.savefig("tair_accession_cds.png")  
-
- def visualizeAgiGene(ids_file, gff_file, genome_name, size):
-     tair = pd.read_csv(gff_file, sep = "\t")
-     renaming_tair = tair.rename(columns={"Chr1":"Chromosome", "chromosome": "gene_type", "1": \
-                            "Start", "30427671": "End", "..1": "Strand", "ID=Chr1;Name=Chr1":"Gene_ID"})
-
-     gene_type = renaming_tair[["gene_type", "Start", "End"]].where(renaming_tair["gene_type"] == "exon").dropna()
-     gene_type_start = list(map(int,renaming_tair[["gene_type", "Start", "End"]].where(renaming_tair["gene_type"] \
-                                                                                    == "exon").dropna()["Start"].to_list()))
-     gene_type_end = list(map(int,renaming_tair[["gene_type", "Start", "End"]].where(renaming_tair["gene_type"] == \
-                                                                                    "exon").dropna()["End"].to_list()))
-     gene_type_strand = list(map(lambda n: 1 if n == "+" else -1,renaming_tair[["gene_type", "Start", "End", "Strand"]].
-                                           where(renaming_tair["gene_type"] == "exon").dropna()["Strand"].to_list()))
-     gene_type_exon_ID = pd.DataFrame(renaming_tair[["gene_type", "Start", "End","Gene_ID"]]. \
-                                     where(renaming_tair["gene_type"] == "exon").dropna() \
-                                      ["Gene_ID"].apply(lambda n: n.replace("Parent=", "")))
-     gene_type_exon_ID_AGI = pd.DataFrame(renaming_tair[["gene_type", "Start", "End","Gene_ID"]]. \
-                                     where(renaming_tair["gene_type"] == "exon").dropna() \
-                                      ["Gene_ID"].apply(lambda n: n.replace("Parent=", "")))["Gene_ID"].to_list()
-    arabidopsis_gene = []
-    for i in range(len(gene_type_start)):
-        arabidopsis_gene.append([gene_type_start[i], gene_type_end[i], gene_type_strand[i]])
-    agi_ids = []
-    final_ids = []
-    with open(os.path.abspath(os.path.join(os.getcwd(), ids_file)), "r") as ids:
-        for line in ids.readlines():
-            agi_ids.append(line.strip())
-        final_ids = [i.upper() for i in agi_ids if i!= ""]
-        selected_genes = [i for i in arabidopsis_genes for j in final_ids if j in i[0]]
-    gv = GenomeViz()
-    track = gv.add_feature_track(name, genome_size)
-    for i, j in enumerate(selected_genes, 1):
-    start, end, strand = j
-    track.add_feature(start, end, strand, label=f"cds{idx:02d}") 
-    gv.savefig("tair_accession_genes.png")
-
-def GeneNames(ids_files):
-    """
-    _summary_
-    this function takes an id file and scan
-    against the phytozome and presents the 
-    gene name and the gene name. 
-    Arguments:
-        ids_files -- _description_
-        this contains the ids you want to 
-        search for the gene name
-    Returns:
-        _description_
-        provides a nested list where the 
-        list[0] is the agi provided in the
-        file and list[1] is the gene
-        name.
-    """
-    geneNames = geneNames.geneNames
-    agi_ids = []
-     final_ids = []
-     with open(os.path.abspath(os.path.join(os.getcwd(), ids_file)), "r") as ids:
-        for line in ids.readlines():
-            agi_ids.append(line.strip())
-        final_ids = [i.upper() for i in agi_ids if i!= ""]
-        return [(k,v) for k,v in geneNames for i in final_ids if i==k]
-
-def FunctionalNames(ids_files):
-    """
-    _summary_
-    this function takes an id file and scan
-    against the phytozome and presents the 
-    gene name and the functional name. 
-    Arguments:
-        ids_files -- _description_
-        this contains the ids you want to 
-        search for the functional name.
-    Returns:
-        _description_
-        provides a nested list where the 
-        list[0] is the agi provided in the
-        file and list[1] is the functional
-        name.
-    """
-    functionalNames = functionalNames.functionalNames
-    agi_ids = []
-     final_ids = []
-     with open(os.path.abspath(os.path.join(os.getcwd(), ids_file)), "r") as ids:
-        for line in ids.readlines():
-            agi_ids.append(line.strip())
-        final_ids = [i.upper() for i in agi_ids if i!= ""]
-        return [(k,v) for k,v in functionalNames for i in final_ids if i==k]
 
 def phytozomePacID(gff_file, ids_file):
     """
@@ -489,29 +384,29 @@ def phytozomePacID(gff_file, ids_file):
         list[0] and the pacid listed at list[1].
     """
     with open(os.path.abspath(os.path.join(os.getcwd(),gff_file)), "r") as phytozome:
-    with open(os.path.abspath(os.path.join(os.getcwd(),gff_file + "name")), "w") as phytozomer:
-        for line in phytozome.readlines():
-          if line.startswith("!"): 
-            continue     
-          phytozome.write(line)
-    phytozomedataframe = pd.read_csv(os.path.abspath(os.path.join(os.getcwd(),gff_file + "name")), sep = "\t")
-    mRNA = phytozomedataframe.iloc[::,[2,8]]. \
+        with open(os.path.abspath(os.path.join(os.getcwd(),gff_file + "name")), "w") as phytozomer:
+            for line in phytozome.readlines():
+                if line.startswith("!"): 
+                    continue     
+                phytozomer.write(line)
+        phytozomedataframe = pd.read_csv(os.path.abspath(os.path.join(os.getcwd(),gff_file + "name")), sep = "\t")
+        mRNA = phytozomedataframe.iloc[::,[2,8]]. \
                   where(phytozomedataframe.iloc[::,[2,8]]["gene"] == "mRNA").dropna()
-    name = [i.split("=")[1] for i in ([j for i in ([i.split(";") \
+        name = [i.split("=")[1] for i in ([j for i in ([i.split(";") \
                         for i in (mRNA.iloc[::,1].to_list())]) \
                                 for j in i if j.startswith("Name=")])]
-    pacid = [j for i in ([i.split(";") \
+        pacid = [j for i in ([i.split(";") \
                           for i in (mRNA.iloc[::,1].to_list())]) \
                                     for j in i if j.startswith("pacid=")]
-    agiPacID = [(i,j) for i,j in zip(name,pacid)]
-    agi_ids = []
-    final_ids = []
-    with open(os.path.abspath(os.path.join(os.getcwd(), ids_file)), "r") as ids:
-        for line in ids.readlines():
-            agi_ids.append(line.strip())
-        final_ids = [i.upper() for i in agi_ids if i!= ""]
-        return [i for i in agiPacID for j in final_ids if j==i[0]]
-
+        agiPacID = [(i,j) for i,j in zip(name,pacid)]
+        agi_ids = []
+        final_ids = []
+        with open(os.path.abspath(os.path.join(os.getcwd(), ids_file)), "r") as ids:
+            for line in ids.readlines():
+                agi_ids.append(line.strip())
+            final_ids = [i.upper() for i in agi_ids if i!= ""]
+            return [i for i in agiPacID for j in final_ids if j==i[0]]
+        
 def prepareFunctionalNamePhytozome(phytozome_file, output_file):
     """
     _summary_
@@ -525,12 +420,12 @@ def prepareFunctionalNamePhytozome(phytozome_file, output_file):
         a nested list with the pacid and the gene names along with the splice variants. 
     """
     functionalName = {}
-    with open(os.path.abspath(os.path.join(os.getcwd(),phytozome_file), "r")) as file:
+    with open(os.path.abspath(os.path.join(os.getcwd(),phytozome_file)), "r") as file:
         for line in file.readlines():
             functionalName[line.strip().split("\t")[0]] = ''.join(j for i in \
                                                         ([line.strip().split("\t")[2:]]) for j in i)
-    with open(os.path.abspath(os.path.join(os.getcwd(),output_file, "w") as processed:
-        print(geneName, file=processed)
+    with open(os.path.abspath(os.path.join(os.getcwd(),output_file)), "w") as processed:
+        print(f"functionalName={functionalName}", file=processed)
 
 def preparegeneNamePhytozome(phytozome_file, output_file):
     """
@@ -545,10 +440,144 @@ def preparegeneNamePhytozome(phytozome_file, output_file):
         a nested list with the pacid and the gene names along with the splice variants. 
     """   
     geneName = {}
-    with open(os.path.abspath(os.path.join(os.getcwd(),phytozome_file), "r")) as file:
+    with open(os.path.abspath(os.path.join(os.getcwd(),phytozome_file)), "r") as file:
         for line in file.readlines():
             geneName[line.strip().split("\t")[0]] = ''.join([j for i in \
                                                             ([line.strip().split("\t")[1]]) for j in i])
-    with open(os.path.abspath(os.path.join(os.getcwd(),output_file), "w")) as processed:
-        print(geneName, file=processed)       
-      
+    with open(os.path.abspath(os.path.join(os.getcwd(),output_file)), "w") as processed:
+        print(f"geneName={geneName}", file=processed) 
+
+def FunctionalNames(ids_file):
+    import tairaccession
+    from tairaccession.functionalNames import functionalNames
+    """
+    _summary_
+    this function takes an id file and scan
+    against the phytozome and presents the 
+    gene name and the functional name. 
+    Arguments:
+        ids_files -- _description_
+        this contains the ids you want to 
+        search for the functional name.
+    Returns:
+        _description_
+        provides a nested list where the 
+        list[0] is the agi provided in the
+        file and list[1] is the functional
+        name.
+    """
+    agi_ids = []
+    final_ids = []
+    with open(os.path.abspath(os.path.join(os.getcwd(), ids_file)), "r") as ids:
+        for line in ids.readlines():
+            agi_ids.append(line.strip())
+        final_ids = [i.upper() for i in agi_ids if i!= ""]
+        return [(k,v) for k,v in tairaccession.functionalNames.functionalNames.items() for i in final_ids if i==k]
+
+
+def GeneNames(ids_file):
+    import tairaccession
+    from tairaccession.geneNames import geneNames
+    """
+    _summary_
+    this function takes an id file and scan
+    against the phytozome and presents the 
+    gene name and the gene name. 
+    Arguments:
+        ids_files -- _description_
+        this contains the ids you want to 
+        search for the gene name
+    Returns:
+        _description_
+        provides a nested list where the 
+        list[0] is the agi provided in the
+        file and list[1] is the gene
+        name.
+    """
+    agi_ids = []
+    final_ids = []
+    with open(os.path.abspath(os.path.join(os.getcwd(), ids_file)), "r") as ids:
+        for line in ids.readlines():
+            agi_ids.append(line.strip())
+        final_ids = [i.upper() for i in agi_ids if i!= ""]
+        return [(k,v) for k,v in tairaccession.geneNames.geneNames.items() for i in final_ids if i==k]
+
+
+def visualizeAgiCDS(ids_file, gff_file, genome_name, size, save_path):
+    tair = pd.read_csv(gff_file, sep = "\t")
+    renaming_tair = tair.rename(columns={"Chr1":"Chromosome", "chromosome": "gene_type", "1": \
+                            "Start", "30427671": "End", "..1": "Strand", "ID=Chr1;Name=Chr1":"Gene_ID"})
+    cds_type = renaming_tair[["gene_type", "Start", "End", "Strand"]].where(renaming_tair["gene_type"] == "CDS").dropna()
+    cds_type_start = list(map(int,renaming_tair[["gene_type", "Start", "End"]].where(renaming_tair["gene_type"] \
+                                                                                    == "CDS").dropna()["Start"].to_list()))
+    cds_type_end = list(map(int,renaming_tair[["gene_type", "Start", "End"]].where(renaming_tair["gene_type"] == \
+                                                                                    "CDS").dropna()["End"].to_list()))
+    cds_type_strand = list(map(lambda n: 1 if n == "+" else -1,renaming_tair[["gene_type", "Start", "End", "Strand"]].
+                                           where(renaming_tair["gene_type"] == "CDS").dropna()["Strand"].to_list()))
+    cds_type_ID = pd.DataFrame(renaming_tair[["gene_type", "Start", "End","Gene_ID"]]. \
+                                     where(renaming_tair["gene_type"] == "CDS").dropna() \
+                                      ["Gene_ID"].apply(lambda n: n.split(",")[0]).apply(lambda n: n.replace("Parent=", "")))
+    cds_type_ID_AGI = pd.DataFrame(renaming_tair[["gene_type", "Start", "End","Gene_ID"]]. \
+                                     where(renaming_tair["gene_type"] == "CDS").dropna() \
+                                      ["Gene_ID"].apply(lambda n: n.split(",")[0]).apply(lambda n: n.replace("Parent=", "")))["Gene_ID"].to_list()  
+    arabidopsis_cds = []
+    for i in range(len(cds_type_start)):
+        arabidopsis_cds.append([cds_type_ID_AGI[i], cds_type_start[i],cds_type_end[i],cds_type_strand[i]])
+    agi_ids = []
+    final_ids = []
+    with open(os.path.abspath(os.path.join(os.getcwd(), ids_file)), "r") as ids:
+        for line in ids.readlines():
+            agi_ids.append(line.strip())
+    final_ids = [i.upper() for i in agi_ids if i!= ""]
+    global selected_cds
+    selected_cds = [tuple([i[1],i[2],i[3]]) for i in arabidopsis_cds for j in final_ids if j in i[0]]
+    from pygenomeviz import GenomeViz
+    name, genome_size = genome_name, int(size)
+    gv = GenomeViz()
+    selected_list = [tuple([i[1],i[2],i[3]]) for i in arabidopsis_cds for j in final_ids if j in i[0]]
+    track = gv.add_feature_track(name, genome_size)
+    for idx, cds in enumerate(selected_list, 1):
+        start, end, strand = cds
+        track.add_feature(start, end, strand, label=f"CDS{idx:02d}")
+    gv.savefig(os.path.abspath(os.path.join(os.getcwd(),save_path,"plot_coding.png")))
+    return selected_cds    
+
+
+def visualizeExons(ids_file, gff_file, genome_name, size,save_path):
+     tair = pd.read_csv(gff_file, sep = "\t")
+     renaming_tair = tair.rename(columns={"Chr1":"Chromosome", "chromosome": "gene_type", "1": \
+                            "Start", "30427671": "End", "..1": "Strand", "ID=Chr1;Name=Chr1":"Gene_ID"})
+     exon_type = renaming_tair[["gene_type", "Start", "End"]].where(renaming_tair["gene_type"] == "exon").dropna()
+     exon_type_start = list(map(int,renaming_tair[["gene_type", "Start", "End"]].where(renaming_tair["gene_type"] \
+                                                                                    == "exon").dropna()["Start"].to_list()))
+     exon_type_end = list(map(int,renaming_tair[["gene_type", "Start", "End"]].where(renaming_tair["gene_type"] == \
+                                                                                    "exon").dropna()["End"].to_list()))
+     exon_type_strand = list(map(lambda n: 1 if n == "+" else -1,renaming_tair[["gene_type", "Start", "End", "Strand"]].
+                                           where(renaming_tair["gene_type"] == "exon").dropna()["Strand"].to_list()))
+     exon_type_exon_ID = pd.DataFrame(renaming_tair[["gene_type", "Start", "End","Gene_ID"]]. \
+                                     where(renaming_tair["gene_type"] == "exon").dropna() \
+                                      ["Gene_ID"].apply(lambda n: n.replace("Parent=", "")))
+     exon_type_exon_ID_AGI = pd.DataFrame(renaming_tair[["gene_type", "Start", "End","Gene_ID"]]. \
+                                     where(renaming_tair["gene_type"] == "exon").dropna() \
+                                      ["Gene_ID"].apply(lambda n: n.replace("Parent=", "")))["Gene_ID"].to_list()
+     arabidopsis_exon = []
+     for i in range(len(exon_type_start)):
+            arabidopsis_exon.append([exon_type_exon_ID_AGI[i], exon_type_start[i], exon_type_end[i], exon_type_strand[i]])
+     agi_ids = []
+     final_ids = []
+     with open(os.path.abspath(os.path.join(os.getcwd(), ids_file)), "r") as ids:
+        for line in ids.readlines():
+            agi_ids.append(line.strip())
+     final_ids = [i.upper() for i in agi_ids if i!= ""]
+     global selected_exon
+     selected_exon = [i for i in arabidopsis_exon for j in final_ids if j in i[0]]
+     from pygenomeviz import GenomeViz
+     ame, genome_size = genome_name, int(size)
+     gv = GenomeViz()
+     selected_list = [tuple([i[1],i[2],i[3]]) for i in arabidopsis_exon for j in final_ids if j in i[0]]
+     track = gv.add_feature_track(name, genome_size)
+     for idx, cds in enumerate(selected_list, 1):
+        start, end, strand = cds
+        track.add_feature(start, end, strand, label=f"CDS{idx:02d}")
+     gv.savefig(os.path.abspath(os.path.join(os.getcwd(),save_path,"plot_coding.png")))
+     return selected_exon
