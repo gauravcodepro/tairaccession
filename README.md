@@ -237,7 +237,7 @@ from tairaccession.tairaccession import visualizeExons
 visualizeAgiCDS("/Users/gauravsablok/Desktop/CodeTest/release/gene_id.txt", 
         "/Users/gauravsablok/Desktop/CodeTest/release/TAIR10_GFF3_genes.gff", 
                                                     "arabidopsis", 10000, path)
-[visual](https://github.com/sablokgaurav/tairaccession/blob/main/gene_exon.png)
+[visual](https://github.com/sablokgaurav/tairaccession/blob/main/gene_exon)
 help(visualizeExons) # for detail documentation
 ``````
 
