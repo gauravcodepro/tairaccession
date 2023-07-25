@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import os
+
 import pandas as pd
 from pygenomeviz import GenomeViz
+
 from tairaccession.functionalNames import functionalNames
 from tairaccession.geneNames import geneNames
-
 
 
 def uniprotAgi(agi_file, ids_file):
@@ -578,6 +579,6 @@ def visualizeExons(ids_file, gff_file, genome_name, size,save_path):
      track = gv.add_feature_track(name, genome_size)
      for idx, cds in enumerate(selected_list, 1):
         start, end, strand = cds
-        track.add_feature(start, end, strand, label=f"CDS{idx:02d}")
-     gv.savefig(os.path.abspath(os.path.join(os.getcwd(),save_path,"plot_coding.png")))
+        track.add_feature(start, end, strand, label=f"exon{idx:02d}")
+     gv.savefig(os.path.abspath(os.path.join(os.getcwd(),save_path,"plot_exon.png")))
      return selected_exon
