@@ -229,7 +229,8 @@ from tairaccession.tairaccession import visualizeAgiCDS
 visualizeAgiCDS("/Users/gauravsablok/Desktop/CodeTest/release/gene_id.txt", 
         "/Users/gauravsablok/Desktop/CodeTest/release/TAIR10_GFF3_genes.gff", 
                                                     "arabidopsis", 10000, path)
-[visual](https://github.com/sablokgaurav/tairaccession/blob/main/gene_exon.png)
+<img src="https://github.com/sablokgaurav/tairaccession/blob/main/gene_exon.png">
+
 help(visualizeAgiCDS) # for detail documentation
 ``````
 ```python
@@ -237,7 +238,7 @@ from tairaccession.tairaccession import visualizeExons
 visualizeAgiCDS("/Users/gauravsablok/Desktop/CodeTest/release/gene_id.txt", 
         "/Users/gauravsablok/Desktop/CodeTest/release/TAIR10_GFF3_genes.gff", 
                                                     "arabidopsis", 10000, path)
-[visual](https://github.com/sablokgaurav/tairaccession/blob/main/gene_exon)
+<img src="https://github.com/sablokgaurav/tairaccession/blob/main/gene_exon.png">
 help(visualizeExons) # for detail documentation
 ``````
 
