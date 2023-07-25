@@ -67,6 +67,7 @@ agiCoordinates(ids_file, gff_file, gene_type = None)
 #if gene_type #is exon: it will return the exon coordinates for the agi in the file,
 #if gene_type is three_prime_UTR: it will return the three_prime_UTR 
 #if gene_type is five_prime_UTR: it will return the five_prime_UTR coordinates for the agi in the file,
+#if gene_type is cds: it will return the cds for the agi in the file,
 agiCoordinates("/Users/gauravsablok/Desktop/release/test_ids.txt", \
                     "/Users/gauravsablok/Desktop/release/TAIR10_GFF3_genes.gff", \
                                                                 gene_type = "gene")
