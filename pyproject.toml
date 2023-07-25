@@ -9,6 +9,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.11"
 pandas = "^2.0.3"
+pygenomeviz = "^0.3.2"
 
 [tool.poetry.dev-dependencies]
 
