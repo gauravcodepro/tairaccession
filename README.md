@@ -1,7 +1,6 @@
 # tairaccession
 
 tairaccession: This package has been developed at University of Pretoria, South Africa and licensed to University of Pretoria, South Africa. This allows you to analyze the tair accession ids easily and you can see the sample datasets for each of the import function with in the tests directory and the corresponding format are available from [TAIR](https://www.arabidopsis.org). This package has added utilities for analyzing also the Phytozome datasets and also you can plot the desried genes of interest. You can also analyze [Phytozome Araport](https://phytozome-next.jgi.doe.gov) also using this package.The package is under release at PyPI package repository. I have updated this package with additional support for the phytozome in addition to the tair. In an update to this package, few functions on plotting the coding regions, gene regions and exons have been added.There are additional functions such ```prepareFunctionalNamePhytozome```and ```preparegeneNamePhytozome```which will automatically prepare the files as per the release of the phytozome and tair.
-```
 Gaurav Sablok \
 Senior Postdoctoral Fellow \
 Faculty of Natural and Agricultural Sciences Room 7-35, \
@@ -21,7 +20,7 @@ ResearchGate: https://www.researchgate.net/profile/Gaurav-Sablok \
 [Linkedln](https://www.linkedin.com/in/sablokgaurav/)
 [ResearchGate](https://www.researchgate.net/profile/Gaurav-Sablok)
 [Academia](https://up-za.academia.edu/GauravSablok)
-```
+
 
 If you have any questions, please contact at sablokg@gmail.com. 
 ## Installation
