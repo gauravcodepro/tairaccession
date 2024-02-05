@@ -4,11 +4,13 @@ tairaccession: This allows you to analyze the tair accession ids easily and you 
 
 A web manual is located at [tairaccession](https://docsify-this.net/?basePath=https://raw.githubusercontent.com/sablokgaurav/tairaccession/main&homepage=README.md&sidebar=true&edit-link=https://github.com/sablokgaurav/tairaccession/blob/main/README.md#/)
 
-Gaurav Sablok \
-ORCID: https://orcid.org/0000-0002-4157-9405 \
-WOS: https://www.webofscience.com/wos/author/record/C-5940-2014 \
-RubyGems Published: https://rubygems.org/profiles/sablokgaurav \
-Python Packages Published : https://pypi.org/user/sablokgaurav/
+Update: 2024-2-5 \
+Adding the support for the word segmentation and embeedings preparation from the sequences for the machine learning and final release. 
+
+Gaurav Sablok, \
+Academic Staff Member,Bioinformatics, \
+Institute for Biochemistry and Biology, \
+University of Potsdam,Potsdam,Germany \
 
 If you have any questions, please contact at sablokg@gmail.com. 
 ## Installation
