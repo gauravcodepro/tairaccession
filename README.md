@@ -309,7 +309,7 @@ By contributing to this project, you agree to abide by its terms.
 
 ## License
 
-`tairaccession` was created by Gaurav Sablok, It is licensed under the terms of the MIT license.
+`tairaccession` was created by Gaurav Sablok, Universitat Potsdam, Germany. It is licensed under the terms of the MIT license.
 
 ## Credits
 
