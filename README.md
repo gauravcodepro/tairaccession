@@ -10,9 +10,10 @@ Adding the support for the word segmentation and embeedings preparation from the
 Gaurav Sablok, \
 Academic Staff Member,Bioinformatics, \
 Institute for Biochemistry and Biology, \
-University of Potsdam,Potsdam,Germany 
+University of Potsdam
+Potsdam,Germany 
 
-If you have any questions, please contact at gaurav.sablok@uni-potsdam.de/sablokg@gmail.com. 
+If you have any questions, please contact at gaurav.sablok@uni-potsdam.de and sablokg@gmail.com. 
 ## Installation
 
 ```bash
