@@ -312,7 +312,7 @@ By contributing to this project, you agree to abide by its terms.
 
 `tairaccession` was created by Gaurav Sablok, Universitat Potsdam, Germany. It is licensed under the terms of the MIT license.
 
-Gaurav Sablok \
+Gaurav \
 Academic Staff Member \
 Bioinformatics \
 Institute for Biochemistry and Biology \
