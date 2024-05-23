@@ -13,7 +13,7 @@ Institute for Biochemistry and Biology, \
 University of Potsdam
 Potsdam,Germany 
 
-If you have any questions, please contact at gaurav.sablok@uni-potsdam.de and sablokg@gmail.com. 
+If you have any questions, please contact at gaurav.sablok@uni-potsdam.de.
 ## Installation
 
 ```bash
