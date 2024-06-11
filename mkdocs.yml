@@ -4,3 +4,6 @@ theme:
   name: readthedocs
 nav: 
   - Home: index.md
+  - Verison: CHANGELOG.md
+  - Contribution: CONTRIBUTING.md
+  - Conduct: CONDUCT.md
