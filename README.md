@@ -4,9 +4,9 @@
 
 - The web documentation is located at [tairaccession](https://gauravcodepro.github.io/tairaccession)
 
-Gaurav Sablok, \
-Academic Staff Member,Bioinformatics, \
-Institute for Biochemistry and Biology, \
+Gaurav Sablok, 
+Academic Staff Member,Bioinformatics, 
+Institute for Biochemistry and Biology, 
 University of Potsdam
 Potsdam,Germany 
 
