@@ -1,0 +1,45 @@
+name: tairaccession 
+on:
+  push:
+    branches:
+      - master 
+      - main
+permissions:
+  contents: write
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure Git Credentials
+        run: |
+          git config user.name github-actions[bot]
+          git config user.name 41898282+github-actions[bot]@users.noreply.github.com
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+      - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV 
+      - uses: actions/cache@v4
+        with:
+          key: mkdocs-material-${{ env.cache_id }}
+          path: .cache
+          restore-keys: |
+            mkdocs-material-
+      - run: pip install mkdocs 
+      - run: pip install mkdocs-bootswatch
+      - run: pip install mkdocs-gitbook
+      - run: pip install plotly
+      - run: pip install pandas
+      - run: pip install matplotlib
+      - run: pip install mkdocs-charts-plugin
+      - run: pip install mkdocs-plotly-plugin 
+      - run: pip install mkdocs-pdf-with-js-plugin
+      - run: pip install mkdocs-exclude-search
+      - run: pip install mkdocs-autolinks-plugin
+      - run: pip install mkdocs-pdf-export-plugin
+      - run: pip install mkdocs-table-reader-plugin
+      - run: pip install mkdocs-pdf-with-js-plugin
+      - run: pip install mkdocs-diagrams
+      - run: pip install mkdocs-bootstrap4 
+      - run: mkdocs gh-deploy --force
+
