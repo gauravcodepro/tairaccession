@@ -1,11 +1,8 @@
 # tairaccession
 
-tairaccession: This allows you to analyze the tair accession ids easily and you can see the sample datasets for each of the import function with in the tests directory and the corresponding format are available from [TAIR](https://www.arabidopsis.org). This package has added utilities for analyzing also the Phytozome datasets and also you can plot the desried genes of interest. You can also analyze [Phytozome Araport](https://phytozome-next.jgi.doe.gov) also using this package.The package is under release at PyPI package repository. I have updated this package with additional support for the phytozome in addition to the tair. In an update to this package, few functions on plotting the coding regions, gene regions and exons have been added.There are additional functions such ```prepareFunctionalNamePhytozome```and ```preparegeneNamePhytozome```which will automatically prepare the files as per the release of the phytozome and tair.
+- tairaccession: This allows you to analyze the tair accession ids easily and you can see the sample datasets for each of the import function with in the tests directory and the corresponding format are available from [TAIR](https://www.arabidopsis.org). This package has added utilities for analyzing also the Phytozome datasets and also you can plot the desried genes of interest. You can also analyze [Phytozome Araport](https://phytozome-next.jgi.doe.gov) also using this package.The package is under release at PyPI package repository. I have updated this package with additional support for the phytozome in addition to the tair. In an update to this package, few functions on plotting the coding regions, gene regions and exons have been added.There are additional functions such ```prepareFunctionalNamePhytozome```and ```preparegeneNamePhytozome```which will automatically prepare the files as per the release of the phytozome and tair.
 
-A web manual is located at [tairaccession](https://docsify-this.net/?basePath=https://raw.githubusercontent.com/sablokgaurav/tairaccession/main&homepage=README.md&sidebar=true&edit-link=https://github.com/sablokgaurav/tairaccession/blob/main/README.md#/)
-
-Update: 2024-2-5 \
-Adding the support for the word segmentation and embeedings preparation from the sequences for the machine learning and final release. 
+- The web documentation is located at [tairaccession](https://gauravcodepro.github.io/tairaccession)
 
 Gaurav Sablok, \
 Academic Staff Member,Bioinformatics, \
