@@ -239,7 +239,7 @@ visualizeAgiCDS("/Users/gauravsablok/Desktop/CodeTest/release/gene_id.txt",
                                                     "arabidopsis", 10000, path)
 help(visualizeAgiCDS) # for detail documentation
 ``````
-![Visual](https://github.com/sablokgaurav/tairaccession/blob/main/gene_exon.png)
+![Visual](https://github.com/gauravcodepro/tairaccession/blob/main/gene_exon.png)
 
 ```python
 from tairaccession.tairaccession import visualizeExons
@@ -248,7 +248,7 @@ visualizeAgiCDS("/Users/gauravsablok/Desktop/CodeTest/release/gene_id.txt",
                                                     "arabidopsis", 10000, path)
 help(visualizeExons) # for detail documentation
 ``````
-![Visual](https://github.com/sablokgaurav/tairaccession/blob/main/gene_exon.png)
+![Visual](https://github.com/gauravcodepro/tairaccession/blob/main/gene_exon.png)
 
 ```python
 readTairNCBI("/Users/gauravsablok/Desktop/CodeCheck/release/ATH_GO_GOSLIM.txt", \
@@ -301,9 +301,7 @@ readTairNCBI("/Users/gauravsablok/Desktop/CodeCheck/release/ATH_GO_GOSLIM.txt", 
 ```
 ## Contributing
 
-Interested in contributing? Check out the contributing guidelines. 
-Please note that this project is released with a Code of Conduct. 
-By contributing to this project, you agree to abide by its terms.
+Interested in contributing? Check out the contributing guidelines.  Please note that this project is released with a Code of Conduct.  By contributing to this project, you agree to abide by its terms.
 
 ## License
 
