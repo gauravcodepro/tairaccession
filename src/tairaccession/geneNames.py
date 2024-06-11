@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 geneNames = {'AT1G01010.1': 'NAC001', 'AT1G01020.1': 'ARV1', 'AT1G01020.2': 'ARV1', 'AT1G01020.3': 'ARV1', 'AT1G01020.4': 'ARV1', 'AT1G01020.5': 'ARV1', 'AT1G01020.6': 'ARV1', 

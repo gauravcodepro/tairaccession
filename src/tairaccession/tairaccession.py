@@ -1,15 +1,4 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-import os
-from urllib.request import urlopen
-
-import pandas as pd
-from bs4 import BeautifulSoup
-from pygenomeviz import GenomeViz
-
-from tairaccession.functionalNames import functionalNames
-from tairaccession.geneNames import geneNames
-
+#!/usr/bin/python3
 
 def uniprotAgi(agi_file, ids_file):
     """
@@ -638,4 +627,4 @@ def readTairNCBI(input, output, arg_id):
         ncbi_derive_information[format_check[i]] = ''.join([i.get_text().strip() \
             for i in BeautifulSoup(urlopen(format_check[i]), \
                 "html.parser").find_all("div", class_ = "abstract-content selected")])
-    return [(k,v) for k,v in ncbi_derive_information.items() if k or v != ""] 
+    return [(k,v) for k,v in ncbi_derive_information.items() if k or v != ""]
