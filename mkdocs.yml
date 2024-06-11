@@ -1,7 +1,7 @@
 site_name: tairaccession
 site_url: https://gauravcodepro.github.io/tairaccession
 theme: 
-  name: readthedocs
+  name: gitbook
 nav: 
   - Home: index.md
   - Verison: CHANGELOG.md
